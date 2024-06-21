@@ -1,0 +1,22 @@
+<launch>
+
+    <node pkg="scape" type="scape.py" name="scape" output="screen">
+        <param name="D" value="0.7"/>
+        <param name="k_i" value="1"/>
+        <param name="k_p" value="0.5"/>
+        <param name="k_d" value="10"/>
+    </node>
+
+    <node pkg="scape" type="monitor.py" name="monitor"></node>
+
+    <include file="$(find turtlebot3_gazebo)/launch/custom_empty_world.launch">
+        <arg name="model" value="waffle"/>
+        <arg name="world_name" value="$(find turtlebot3_gazebo)/worlds/maze.world" />
+        <arg name="x_pos" value="-0.5"/> 
+    </include>
+
+    
+    <include file="$(find turtlebot3_gazebo)/launch/turtlebot3_gazebo_rviz.launch"/>
+
+</launch>
+

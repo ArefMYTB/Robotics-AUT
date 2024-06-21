@@ -1,0 +1,4 @@
+string object_label
+---
+int32[] object_info
+int32[] image_size

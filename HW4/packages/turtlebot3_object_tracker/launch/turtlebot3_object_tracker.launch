@@ -1,0 +1,35 @@
+<launch>
+  <arg name="x_pos" default="2.245"/>
+  <arg name="y_pos" default="-1.787"/>
+  <arg name="z_pos" default="0.0"/>
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find turtlebot3_gazebo)/worlds/turtlebot3_autorace.world" />
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>
+
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_object_tracker)/urdf/turtlebot3_human.urdf.xacro" />
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf" args="-urdf -model turtlebot3_human -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -param robot_description" />
+  
+  <group ns = "follower">
+    <arg name="follower_x_pos" default="0.245"/>
+    <arg name="follower_y_pos" default="-1.787"/>
+    <arg name="follower_z_pos" default="0.0"/>
+
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_burger_for_autorace.urdf.xacro" />
+    <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf" args="-urdf -model follower_turtlebot3_burger -x $(arg follower_x_pos) -y $(arg follower_y_pos) -z $(arg follower_z_pos) -param /follower/robot_description" />
+  </group>
+
+  <node pkg="turtlebot3_object_tracker" type="controller.py" name="controller"/>
+
+  <node pkg="turtlebot3_object_tracker" type="image_processor.py" name="image_processor"/>
+
+
+  <param name="model" value="burger"/>
+  <node pkg="turtlebot3_teleop" type="turtlebot3_teleop_key" name="turtlebot3_teleop_keyboard"  output="screen"/>
+
+</launch>

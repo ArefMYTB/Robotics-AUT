@@ -1,0 +1,35 @@
+<launch>
+
+    <node pkg="hw2" type="control.py" name="control" output="screen">
+        <param name="linear_speed" value="$(arg linear_speed)"/>
+        <param name="angular_speed" value="$(arg angular_speed)"/>
+        <param name="epsilon" value="$(arg epsilon)"/>
+        
+    </node>
+
+    <node pkg="hw2" type="mission.py" name="mission" output="screen"/>
+    <node pkg="hw2" type="monitor.py" name="monitor"></node>
+
+    <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
+    <arg name="x_pos" default="0.0"/>
+    <arg name="y_pos" default="0.0"/>
+    <arg name="z_pos" default="0.0"/>
+
+    
+    <include file="$(find turtlebot3_gazebo)/launch/custom_empty_world.launch">
+        <arg name="world_name" value="$(find turtlebot3_gazebo)/worlds/empty.world"/>
+        <arg name="paused" value="false"/>
+        <arg name="use_sim_time" value="true"/>
+        <arg name="gui" value="true"/>
+        <arg name="headless" value="false"/>
+        <arg name="debug" value="false"/>
+    </include>
+
+    
+
+    <include file="$(find turtlebot3_gazebo)/launch/turtlebot3_gazebo_rviz.launch"/>   
+
+</launch>
+
+
+<!-- roslaunch hw2 control.launch epsilon:=0.001 angular_speed:=0.2 linear_speed:=0.2 -->
